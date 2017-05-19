@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-script='new Promise((resolve, reject) => {
+script='return new Promise((resolve, reject) => {
   timer.setTimeout(
     () => {
       console.log("Promise kept!")

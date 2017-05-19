@@ -1,6 +1,6 @@
 {
   "name": "@warren-bank/dapp-console",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "dependencies": {
     "web3": "^0.19.0",
     "yargs": "^8.0.1"

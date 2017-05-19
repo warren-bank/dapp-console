@@ -153,6 +153,12 @@ fname_abis.forEach((fname) => {
 const run_script = function(script){
   var result
 
+  // wrap 'script' code inside an anonymous self-invoking function.
+  // by doing so, the `return` keyword can be used to pass a `Promise` to 'result'.
+  // otherwise, the final statement in the block of 'script' code would need to evaluate to the `Promise`,
+  // which, imho, is a coding style that's restrictive and awkward to use.
+  script = '(function(){' + "\n" + script + "\n" + '})()'
+
   result = vm.runInNewContext(
     script,
     Object.assign({}, contract_objects, {web3}, {console, fs, timer})
