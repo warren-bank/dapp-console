@@ -6,6 +6,7 @@ const repl = require('repl')
 const fs = require('fs')
 const Web3 = require('web3')
 const timer = require('timers')
+const path = require('path')
 
 const argv = yargs
     .usage(`
@@ -150,8 +151,8 @@ fname_abis.forEach((fname) => {
   contract_objects[contract_name] = $contract
 })
 
-const run_script = function(script){
-  var result
+const run_script = function(script, fpath){
+  var fcontext, result
 
   // wrap 'script' code inside an anonymous self-invoking function.
   // by doing so, the `return` keyword can be used to pass a `Promise` to 'result'.
@@ -159,9 +160,34 @@ const run_script = function(script){
   // which, imho, is a coding style that's restrictive and awkward to use.
   script = '(function(){' + "\n" + script + "\n" + '})()'
 
+  fcontext = {}
+  if (fpath){
+    // for scripts that are read from an input file,
+    // include additional filesystem-related context variables.
+    fcontext = (function(){
+      var $cwd, $realpath, $dirname, $filename
+      $cwd = process.cwd()
+      if (path.isAbsolute(fpath)){
+        $realpath = fpath
+      }
+      else {
+        $realpath = $cwd + '/' + fpath
+        $realpath = path.normalize($realpath)
+      }
+      $dirname = path.dirname($realpath)
+      $filename = path.basename($realpath)
+      return {
+        "__cwd": $cwd,
+        "__realpath": $realpath,
+        "__dirname": $dirname,
+        "__filename": $filename
+      }
+    })()
+  }
+
   result = vm.runInNewContext(
     script,
-    Object.assign({}, contract_objects, {web3}, {console, fs, timer})
+    Object.assign({}, fcontext, contract_objects, {web3}, {console, path, fs, timer})
   )
 
   Promise.resolve(result)
@@ -175,7 +201,7 @@ if (inline_script){
 }
 
 else if (input_file){
-  run_script(fs.readFileSync(input_file).toString())
+  run_script(fs.readFileSync(input_file).toString(), input_file)
 }
 
 else {
