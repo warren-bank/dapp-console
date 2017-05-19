@@ -1,0 +1,27 @@
+{
+  "name": "@warren-bank/dapp-console",
+  "version": "1.0.0",
+  "dependencies": {
+    "web3": "^0.19.0",
+    "yargs": "^8.0.1"
+  },
+  "bin": {
+    "dapp-console": "bin/dapp-console.js"
+  },
+  "license": "GPL-2.0",
+  "author": {
+    "name": "Warren R. Bank",
+    "email": "warren.r.bank@gmail.com",
+    "url": "https://github.com/warren-bank"
+  },
+  "homepage": "https://github.com/warren-bank/dapp-console",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/warren-bank/dapp-console"
+  },
+  "bugs": {
+    "url": "https://github.com/warren-bank/dapp-console/issues"
+  },
+  "description": "Command-line REPL javascript console. 'Web3.js' provides access to an Ethereum blockchain. Compiled contracts are represented as objects. Each deployed contract (with available 'dapp-deploy' metadata) is associated with its on-chain address.",
+  "keywords": ["web3.js","web3","ethereum","solidity","solc","geth","testrpc","dapp","dapple","dapphub","truffle","trufflesuite"]
+}
