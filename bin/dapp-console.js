@@ -46,7 +46,7 @@ Usage: $0 [options]
     })
     .option('i', {
       alias: 'input_file',
-      describe: 'Path to javascipt file to execute, then quit.',
+      describe: 'Path to javascript file to execute, then quit.',
       string: true,
       nargs: 1
     })

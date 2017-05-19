@@ -73,7 +73,7 @@ Options:
  --tls, --https, --ssl      Require TLS handshake (https:) to connect to Ethereum JSON-RPC server  [boolean] [default: false]
  -d, --contracts_directory  Path to directory containing all contract artifacts: (.abi, .deployed)
                             note: The default path assumes that the current directory is the root of a compiled "dapp" project.  [string] [default: "./out"]
- -i, --input_file           Path to javascipt file to execute, then quit.  [string]
+ -i, --input_file           Path to javascript file to execute, then quit.  [string]
  -e, --execute              Inline javascript to execute, then quit  [string]
  --help                     Show help  [boolean]
 
