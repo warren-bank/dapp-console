@@ -10,6 +10,10 @@ Command-line REPL javascript console. [`web3.js`](https://github.com/ethereum/we
 npm install -g @warren-bank/dapp-console
 ```
 
+*aside:*
+* Before installation, you first might want to check whether your `$PATH` contains any conflicting symbolic links: `which dapp-console`
+* At present, the [`dapphub/dapp`](https://github.com/dapphub/dapp) toolchain doesn't include a `console` library; But that may change in the future.
+
 #### Simple Example:
 
 ```bash
@@ -87,6 +91,41 @@ Examples:
 copyright: Warren Bank <github.com/warren-bank>
 license: GPLv2
 ```
+
+#### Notes:
+
+* This tool is standalone
+* It is intended to be used in combination with [`dapp-deploy`](https://github.com/warren-bank/dapp-deploy)
+* It is intended to complement the [`dapphub/dapp`](https://github.com/dapphub/dapp) toolchain
+* When `dapp` is installed, this tool can be invoked by the command: `dapp console [options]`
+* When used standalone, it can be invoked by the command: `dapp-console [options]`
+
+#### Methodology:
+
+* initialize web3
+* find all .abi and .deployed files in "contracts directory"
+* for each .abi:
+  * create a javascript object to represent the contract
+    * name of object = filename (without extension)
+    * object = web3.eth.contract(abi)
+  * if a corresponding .deployed file exists,<br>
+    and 1+ addresses are mapped to the network ID of the current blockchain:
+    * associate the object to the more recent deployment address
+      * object = object.at(address)
+* if `-e` is used to execute an inline script,<br>
+  or `-i` is used to execute a script from an input file:
+  * create a sandboxed execution environment
+  * initialize its context to contain all of the contract objects
+  * mixin a few additionally useful variables
+  * run the script
+  * if the return value is a `Promise`: wait until it resolves
+  * exit
+* otherwise:
+  * begin the REPL
+
+#### REPL Commands:
+
+* for info about advanced usage of REPLs in Node.js, please refer to: ["Commands and Special Keys"](https://nodejs.org/api/repl.html#repl_commands_and_special_keys)
 
 #### Legal:
 
