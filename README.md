@@ -123,9 +123,34 @@ license: GPLv2
 * otherwise:
   * begin the REPL
 
+#### Additional Script Execution Context Variables:
+
+* always available:
+  * `toAscii(hex)`
+    * trims trailing `\u0000` from `web3.toAscii(hex)`
+      * When a "bytes32" is converted to a 32 character ascii string with `web3.toAscii(hex)`,
+        if the string contains fewer than 32 characters,
+        then the length of the string remains 32 bits and the unused characters are filled with: "\u0000"
+      * I noticed than when a script outputs several of these strings (ex: in `console.log()` statements),
+        and the output is directed to a log file,
+        only the first ("bytes32" converted) string appears in the file.
+      * I believe this is the result of these "\u0000" characters being recognized by the file system
+        as indicating an EOF (end-of-file) marker.
+      * The purpose of this wrapper function is to sanitize the output of `web3.toAscii(hex)`
+        so strings are safe to write to the file system.
+* only available when executing `--input_file`
+  * `__cwd`
+    * current working directory
+  * `__realpath`
+    * the absolute path to the javascript file that is being evaluated
+  * `__dirname`
+    * the absolute path to the directory of the javascript file that is being evaluated
+  * `__filename`
+    * the filename of the javascript file that is being evaluated
+
 #### REPL Commands:
 
-* for info about advanced usage of REPLs in Node.js, please refer to: ["Commands and Special Keys"](https://nodejs.org/api/repl.html#repl_commands_and_special_keys)
+* For info about advanced usage of REPLs in Node.js, please refer to: ["Commands and Special Keys"](https://nodejs.org/api/repl.html#repl_commands_and_special_keys)
 
 #### Legal:
 

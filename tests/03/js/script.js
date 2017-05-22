@@ -20,5 +20,5 @@ Ballot.delegate(a1, {from:a3})
 Ballot.vote(1, {from:a1})
 
 result = Ballot.winnerName()
-result = web3.toAscii(result)
+result = toAscii(result)
 console.log('winner:', result)

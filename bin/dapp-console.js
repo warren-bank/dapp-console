@@ -151,6 +151,28 @@ fname_abis.forEach((fname) => {
   contract_objects[contract_name] = $contract
 })
 
+const additional_context_variables = function(){
+  var toAscii
+
+  // I've noticed there's an issue with the "web3" implementation.
+  // It converts a "bytes32" to 32 ascii characters.
+  // When the string contains fewer than 32 characters, the string is (right) padded with unicode: "\u0000"
+  // When the string is written to file, this character sequence denotes an EOF marker.
+  // When several such strings are written to file in sequence,
+  // (ex: several "console.log" statements in an input .js file, where the results are piped to an output log file)
+  // only the first string appears in the file..
+  // as the remainder occur after the EOF marker.
+  //
+  // workaround:
+  // wrap the "web3" implementation in a function that sanitizes the output.
+  // from within a script: call "toAscii(hex), rather than "web3.toAscii(hex)"
+  toAscii = function(hex){
+    return web3.toAscii(hex).replace(/(?:\u0000)+$/, '')
+  }
+
+  return {toAscii}
+}
+
 const run_script = function(script, fpath){
   var fcontext, result
 
@@ -187,7 +209,7 @@ const run_script = function(script, fpath){
 
   result = vm.runInNewContext(
     script,
-    Object.assign({}, fcontext, contract_objects, {web3}, {console, path, fs, timer})
+    Object.assign({}, fcontext, contract_objects, {web3}, {console, path, fs, timer}, additional_context_variables())
   )
 
   Promise.resolve(result)
@@ -211,7 +233,7 @@ else {
   });
 
   const initialize_repl_context = function(context) {
-    Object.assign(context, contract_objects, {web3})
+    Object.assign(context, contract_objects, {web3}, additional_context_variables())
   }
 
   initialize_repl_context($console.context)
