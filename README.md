@@ -130,7 +130,7 @@ license: GPLv2
     * trims trailing `\u0000` from `web3.toAscii(hex)`
       * When a "bytes32" is converted to a 32 character ascii string with `web3.toAscii(hex)`,
         if the string contains fewer than 32 characters,
-        then the length of the string remains 32 bits and the unused characters are filled with: "\u0000"
+        then the length of the string remains 32 bytes and the unused characters are filled with: "\u0000"
       * I noticed than when a script outputs several of these strings (ex: in `console.log()` statements),
         and the output is directed to a log file,
         only the first ("bytes32" converted) string appears in the file.
